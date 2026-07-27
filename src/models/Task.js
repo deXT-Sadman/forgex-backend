@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const taskSchema = new mongoose.Schema(
   {
@@ -25,6 +26,22 @@ const taskSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+// Create a static method to generate a unique localId for each task
+taskSchema.statics.generateLocalId = async function () {
+  let uniqueId;
+  let isUnique = false;
+
+  while (!isUnique) {
+    uniqueId = uuidv4();
+    const existingTask = await this.findOne({ localId: uniqueId });
+    if (!existingTask) {
+      isUnique = true;
+    }
+  }
+
+  return uniqueId;
+};
 
 const Task = mongoose.model("Task", taskSchema);
 
