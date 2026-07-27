@@ -1,0 +1,33 @@
+{
+  "name": "forgex-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend for the Forgex application",
+  "type": "commonjs",
+  "module": "src/index.js",
+  "author": {
+    "name": "Sadman Khan",
+    "email": "sadu2k17@gmail.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.8.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "engines": {
+    "node": "24.18.0"    
+  },
+  "packageManager": "npm@11.16.0"
+}
