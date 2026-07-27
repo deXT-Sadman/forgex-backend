@@ -26,7 +26,6 @@ const getTaskById = async (req, res, next) => {
 // Create a new task for the authenticated user
 const createTask = async (req, res, next) => {
   const userId = req.user.id;
-  console.log("Creating task for user:", userId, "with data:", req.body);
 
   const newTask = new Task({
     localId: await Task.generateLocalId(),

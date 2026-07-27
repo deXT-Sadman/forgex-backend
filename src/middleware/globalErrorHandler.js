@@ -1,8 +1,10 @@
 const z = require("zod");
+const colors = require("colors");
 const { mode } = require("../config");
 
+const isDevelopment = mode === "development";
+
 const globalErrorHandler = (err, req, res, next) => {
-  const isDevelopment = mode === "development";
   let statusCode = err.statusCode || err.status || 500;
   let message = err.message || "Internal server error";
   let errors = [];
@@ -24,12 +26,20 @@ const globalErrorHandler = (err, req, res, next) => {
   } else if (err.name === "CastError") {
     statusCode = 400;
     message = "Invalid data format";
-    errors = [{ path: err.path, message: "Invalid ID format" }];
+    errors = [
+      {
+        path: err.path,
+        message: "Invalid ID format",
+      },
+    ];
   } else if (err.code === 11000 || err.code === 11001) {
     statusCode = 409;
     message = "Duplicate field value";
     errors = [
-      { path: "database", message: "A record with this value already exists" },
+      {
+        path: "database",
+        message: "A record with this value already exists",
+      },
     ];
   }
 
@@ -44,7 +54,17 @@ const globalErrorHandler = (err, req, res, next) => {
     response.stack = err.stack;
   }
 
-  console.error(`[${req.method}] ${req.originalUrl} -> ${statusCode}`, err);
+  const logMessage = `[Error] ${req.method} ${req.originalUrl} -> ${statusCode} ${message}`;
+
+  if (statusCode >= 500) {
+    console.error(colors.red(logMessage));
+  } else {
+    console.error(colors.yellow(logMessage));
+  }
+
+  if (isDevelopment) {
+    console.error(colors.gray(err.stack || err));
+  }
 
   return res.status(statusCode).json(response);
 };
