@@ -4,6 +4,8 @@ const cors = require("cors");
 // Routes
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/users.routes");
+const taskRoutes = require("./routes/tasks.routes");
+
 const { globalErrorHandler } = require("./middleware/globalErrorHandler");
 
 const app = express();
@@ -16,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
