@@ -15,4 +15,14 @@ const loginSchema = z.object({
   }),
 });
 
-module.exports = { signupSchema, loginSchema };
+const forgetPasswordSchema = z.object({
+  body: z.object({
+    email: z.string().email("Invalid email address"),
+  }),
+});
+
+module.exports = {
+  signupSchema,
+  loginSchema,
+  forgetPasswordSchema,
+};

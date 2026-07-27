@@ -103,7 +103,16 @@ const login = async (req, res) => {
   }
 };
 
+// Forget password
+const forgetPassword = async (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Email service is not yet implemented. Please try again later.",
+  });
+};
+
 module.exports = {
   signUp,
   login,
+  forgetPassword,
 };
