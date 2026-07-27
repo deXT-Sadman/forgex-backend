@@ -3,6 +3,7 @@ const cors = require("cors");
 
 // Routes
 const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/users.routes");
 const { globalErrorHandler } = require("./middleware/globalErrorHandler");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -22,7 +24,10 @@ app.get("/api/health", (req, res) => {
 
 // Not found handler
 app.use((req, res, next) => {
-  res.status(404).json({ success: false, message: "Not Found" });
+  res.status(404).json({
+    success: false,
+    message: "Not Found",
+  });
 });
 
 // Global error handler
