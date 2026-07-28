@@ -1,8 +1,9 @@
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 const getMe = async (req, res) => {
   const userId = req.user.id;
-  const user = await User.findById(userId).select("-password");
+  const user = await User.findById(userId).select("-passwordHash"); // 👈 was "-password", didn't match the schema field
 
   if (!user) {
     return res.status(404).json({
@@ -19,11 +20,19 @@ const getMe = async (req, res) => {
 
 const updateMe = async (req, res) => {
   const userId = req.user.id;
+  const { password, ...rest } = req.body;
 
-  const user = await User.findByIdAndUpdate(userId, req.body, {
+  // Map the client's "password" field to the schema's "passwordHash",
+  // and actually hash it before saving.
+  const updates = { ...rest };
+  if (password) {
+    updates.passwordHash = await bcrypt.hash(password, 10);
+  }
+
+  const user = await User.findByIdAndUpdate(userId, updates, {
     new: true,
     runValidators: true,
-  }).select("-password");
+  }).select("-passwordHash"); // 👈 was "-password"
 
   if (!user) {
     return res.status(404).json({
